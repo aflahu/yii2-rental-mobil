@@ -3,16 +3,16 @@
 namespace backend\controllers;
 
 use Yii;
-use common\models\Mobil;
-use common\models\MobilSearch;
+use common\models\Fasilitas;
+use common\models\FasilitasSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * MobilController implements the CRUD actions for Mobil model.
+ * FasilitasController implements the CRUD actions for Fasilitas model.
  */
-class MobilController extends Controller
+class FasilitasController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -30,12 +30,12 @@ class MobilController extends Controller
     }
 
     /**
-     * Lists all Mobil models.
+     * Lists all Fasilitas models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new MobilSearch();
+        $searchModel = new FasilitasSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,8 +45,8 @@ class MobilController extends Controller
     }
 
     /**
-     * Displays a single Mobil model.
-     * @param string $id
+     * Displays a single Fasilitas model.
+     * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -58,16 +58,16 @@ class MobilController extends Controller
     }
 
     /**
-     * Creates a new Mobil model.
+     * Creates a new Fasilitas model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Mobil();
+        $model = new Fasilitas();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->no_mobil]);
+            return $this->redirect(['view', 'id' => $model->kode_fasilitas]);
         }
 
         return $this->render('create', [
@@ -76,9 +76,9 @@ class MobilController extends Controller
     }
 
     /**
-     * Updates an existing Mobil model.
+     * Updates an existing Fasilitas model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param string $id
+     * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -87,7 +87,7 @@ class MobilController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->no_mobil]);
+            return $this->redirect(['view', 'id' => $model->kode_fasilitas]);
         }
 
         return $this->render('update', [
@@ -96,9 +96,9 @@ class MobilController extends Controller
     }
 
     /**
-     * Deletes an existing Mobil model.
+     * Deletes an existing Fasilitas model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param string $id
+     * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -110,15 +110,15 @@ class MobilController extends Controller
     }
 
     /**
-     * Finds the Mobil model based on its primary key value.
+     * Finds the Fasilitas model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param string $id
-     * @return Mobil the loaded model
+     * @param integer $id
+     * @return Fasilitas the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Mobil::findOne($id)) !== null) {
+        if (($model = Fasilitas::findOne($id)) !== null) {
             return $model;
         }
 

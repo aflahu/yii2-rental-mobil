@@ -3,9 +3,9 @@
 use yii\db\Migration;
 
 /**
- * Class m201029_001216_add_mobil_table
+ * Class m201029_005201_add_detail_fasilitas_table
  */
-class m201029_001216_add_mobil_table extends Migration
+class m201029_005201_add_detail_fasilitas_table extends Migration
 {
     /**
      * {@inheritdoc}
@@ -19,7 +19,7 @@ class m201029_001216_add_mobil_table extends Migration
      */
     public function safeDown()
     {
-        echo "m201029_001216_add_mobil_table cannot be reverted.\n";
+        echo "m201029_005201_add_detail_fasilitas_table cannot be reverted.\n";
 
         return false;
     }
@@ -32,21 +32,17 @@ class m201029_001216_add_mobil_table extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
 
-        $this->createTable('{{%mobil}}', [
+        $this->createTable('{{%detail_fasilitas}}', [
             'no_mobil' => $this->string(8)->notNull(),
-            'nama_mobil' => $this->string(25)->notNull(),
-            'jenis_mobil' => $this->string(20)->notNull(),
-            'tahun_pembuatan' => $this->integer(5)->notNull(),
-            'harga_sewa' => $this->integer(15)->notNull(),
-            'kapasitas_penumpang' => $this->integer(3)->notNull(),
-            'status_mobil' => $this->string(7)->notNull()
+            'kode_fasilitas' => $this->integer()->notNull(),
         ], $tableOptions);
 
-        $this->addPrimaryKey('maobil_pk', 'mobil', 'no_mobil');
+        $this->createIndex('idx-detail_fasilitas-no_mobil', '{{%detail_fasilitas}}', 'no_mobil');
+        $this->createIndex('idx-detail_fasilitas-kode_fasilitas', '{{%detail_fasilitas}}', 'kode_fasilitas');
     }
 
     public function down()
     {
-        $this->dropTable('{{%mobil}}');
+        $this->dropTable('{{%detail_fasilitas}}');
     }
 }

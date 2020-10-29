@@ -4,12 +4,12 @@ namespace common\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Mobil;
+use common\models\Sewa;
 
 /**
- * MobilSearch represents the model behind the search form of `common\models\Mobil`.
+ * SewaSearch represents the model behind the search form of `common\models\Sewa`.
  */
-class MobilSearch extends Mobil
+class SewaSearch extends Sewa
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class MobilSearch extends Mobil
     public function rules()
     {
         return [
-            [['no_mobil', 'nama_mobil', 'jenis_mobil', 'status_mobil'], 'safe'],
-            [['tahun_pembuatan', 'harga_sewa', 'kapasitas_penumpang'], 'integer'],
+            [['no_nota', 'id_penyewa'], 'integer'],
+            [['tanggal_sewa', 'jaminan'], 'safe'],
         ];
     }
 
@@ -40,7 +40,7 @@ class MobilSearch extends Mobil
      */
     public function search($params)
     {
-        $query = Mobil::find();
+        $query = Sewa::find();
 
         // add conditions that should always apply here
 
@@ -58,15 +58,12 @@ class MobilSearch extends Mobil
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'tahun_pembuatan' => $this->tahun_pembuatan,
-            'harga_sewa' => $this->harga_sewa,
-            'kapasitas_penumpang' => $this->kapasitas_penumpang,
+            'no_nota' => $this->no_nota,
+            'id_penyewa' => $this->id_penyewa,
+            'tanggal_sewa' => $this->tanggal_sewa,
         ]);
 
-        $query->andFilterWhere(['like', 'no_mobil', $this->no_mobil])
-            ->andFilterWhere(['like', 'nama_mobil', $this->nama_mobil])
-            ->andFilterWhere(['like', 'jenis_mobil', $this->jenis_mobil])
-            ->andFilterWhere(['like', 'status_mobil', $this->status_mobil]);
+        $query->andFilterWhere(['like', 'jaminan', $this->jaminan]);
 
         return $dataProvider;
     }

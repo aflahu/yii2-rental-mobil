@@ -38,12 +38,15 @@
                         'icon' => 'database',
                         'url' => '#',
                         'items' => [
+                            ['label' => 'Pengguna', 'icon' => 'address-book', 'url' => ['/user'],],
                             ['label' => 'Mobil', 'icon' => 'car', 'url' => ['/mobil'],],
-                            ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii'],],
-                            ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug'],],
-
+                            ['label' => 'Fasilitas', 'icon' => 'book', 'url' => ['/fasilitas'],],
                         ],
                     ],
+                    ['label' => 'Sewa', 'icon' => 'angle-double-right', 'url' => ['/sewa'],],
+                    ['label' => 'Tool', 'options' => ['class' => 'header']],
+                    ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii'],],
+                    ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug'],],
                 ],
             ]
         ) ?>

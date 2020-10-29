@@ -38,6 +38,7 @@
                         'icon' => 'database',
                         'url' => '#',
                         'items' => [
+                            ['label' => 'Mobil', 'icon' => 'car', 'url' => ['/mobil'],],
                             ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii'],],
                             ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug'],],
 

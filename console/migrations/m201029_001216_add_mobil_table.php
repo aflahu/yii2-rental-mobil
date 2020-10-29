@@ -39,9 +39,7 @@ class m201029_001216_add_mobil_table extends Migration
             'tahun_pembuatan' => $this->integer(5)->notNull(),
             'harga_sewa' => $this->integer(15)->notNull(),
             'kapasitas_penumpang' => $this->integer(3)->notNull(),
-            'status_mobil' => $this->string(7)->notNull(),
-            'created_at' => $this->integer()->notNull(),
-            'updated_at' => $this->integer()->notNull(),
+            'status_mobil' => $this->string(7)->notNull()
         ], $tableOptions);
     }
 

@@ -4,6 +4,9 @@ namespace backend\controllers;
 
 use Yii;
 use common\models\Mobil;
+use backend\models\MobilForm;
+use common\models\DetailFasilitas;
+use common\models\Fasilitas;
 use common\models\MobilSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -52,8 +55,10 @@ class MobilController extends Controller
      */
     public function actionView($id)
     {
+        $arr = Fasilitas::find()->select('fasilitas.nama_fasilitas')->leftJoin('detail_fasilitas', 'fasilitas.kode_fasilitas=detail_fasilitas.kode_fasilitas')->leftJoin('mobil', 'mobil.no_mobil=detail_fasilitas.no_mobil')->where(['mobil.no_mobil' => $id])->column();
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'fasilitas' => join(", ", $arr)
         ]);
     }
 
@@ -64,14 +69,33 @@ class MobilController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Mobil();
+        $model = new MobilForm();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        // if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        //     return $this->redirect(['view', 'id' => $model->no_mobil]);
+        // }
+        if ($model->load(Yii::$app->request->post())) {
+            $model::getDb()->transaction(function ($db) use ($model) {
+
+
+                $model->save();
+                if ($model->detail_fasilitas != null) {
+                    $arr = [];
+                    for ($i = 0; $i < sizeof($model->detail_fasilitas); $i++) {
+                        array_push($arr, $model->no_mobil);
+                    }
+                    Yii::$app->db->createCommand()
+                        ->batchInsert('detail_fasilitas', ['no_mobil', 'kode_fasilitas'], array_map(null, $arr, $model->detail_fasilitas))
+                        ->execute();
+                }
+            });
+
             return $this->redirect(['view', 'id' => $model->no_mobil]);
         }
 
         return $this->render('create', [
             'model' => $model,
+            'fasilitas' => Fasilitas::find()->select('nama_fasilitas')->indexBy('kode_fasilitas')->column()
         ]);
     }
 
@@ -86,12 +110,29 @@ class MobilController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $model::getDb()->transaction(function ($db) use ($model) {
+
+                $model->save();
+                if ($model->detail_fasilitas != null) {
+                    $arr = [];
+                    for ($i = 0; $i < sizeof($model->detail_fasilitas); $i++) {
+                        array_push($arr, $model->no_mobil);
+                    }
+                    DetailFasilitas::deleteAll('no_mobil = :no_mobil', ['no_mobil' => $model->no_mobil]);
+                    Yii::$app->db->createCommand()
+                        ->batchInsert('detail_fasilitas', ['no_mobil', 'kode_fasilitas'], array_map(null, $arr, $model->detail_fasilitas))
+                        ->execute();
+                } else {
+                    DetailFasilitas::deleteAll('no_mobil = :no_mobil', ['no_mobil' => $model->no_mobil]);
+                }
+            });
+
             return $this->redirect(['view', 'id' => $model->no_mobil]);
         }
-
         return $this->render('update', [
             'model' => $model,
+            'fasilitas' => Fasilitas::find()->select('nama_fasilitas')->indexBy('kode_fasilitas')->column()
         ]);
     }
 
@@ -104,7 +145,12 @@ class MobilController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        Mobil::getDb()->transaction(function ($db) use ($model) {
+
+            DetailFasilitas::deleteAll('no_mobil = :no_mobil', ['no_mobil' => $model->no_mobil]);
+            $model->delete();
+        });
 
         return $this->redirect(['index']);
     }
@@ -118,7 +164,8 @@ class MobilController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Mobil::findOne($id)) !== null) {
+        if (($model = MobilForm::findOne($id)) !== null) {
+            $model->detail_fasilitas = DetailFasilitas::find()->select('kode_fasilitas')->where('no_mobil = :no_mobil', ['no_mobil' => $id])->column();
             return $model;
         }
 

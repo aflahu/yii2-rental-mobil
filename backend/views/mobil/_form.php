@@ -1,10 +1,10 @@
 <?php
 
+use kartik\select2\Select2;
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\bootstrap\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Mobil */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
@@ -24,7 +24,13 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'kapasitas_penumpang')->textInput() ?>
 
-    <?= $form->field($model, 'status_mobil')->textInput(['maxlength' => true]) ?>
+    <?=
+        $form->field($model, 'status_mobil')->textInput(['maxlength' => true])->dropDownList(['ada', 'disewa', 'perbaikan'])
+    ?>
+    <?= $form->field($model, 'detail_fasilitas')->widget(Select2::className(), [
+        'data' => $fasilitas,
+        'options' => ['multiple' => true, 'tokenSeparators' => [',', ' '], 'tags' => true]
+    ]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
